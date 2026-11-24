@@ -19,7 +19,7 @@
 
 namespace App\Plugins\CheckpointHA;
 
-use App\Models\Device;
+use App\Plugins\CheckpointHA\Support\CheckpointDevices;
 use App\Plugins\CheckpointHA\Support\ClusterIpTable;
 use App\Plugins\Hooks\PageHook;
 
@@ -35,10 +35,7 @@ class Page extends PageHook
         // only walk the devices selected on the settings page
         $selected = array_map('intval', $settings['devices'] ?? []);
 
-        $devices = Device::query()
-            ->where('disabled', 0)
-            ->where('snmp_disable', 0)
-            ->where('sysObjectID', 'like', '.1.3.6.1.4.1.2620%')
+        $devices = CheckpointDevices::query()
             ->whereIn('device_id', $selected)
             ->orderBy('hostname')
             ->get();

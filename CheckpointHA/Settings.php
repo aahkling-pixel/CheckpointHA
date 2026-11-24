@@ -22,7 +22,7 @@
 
 namespace App\Plugins\CheckpointHA;
 
-use App\Models\Device;
+use App\Plugins\CheckpointHA\Support\CheckpointDevices;
 use App\Plugins\Hooks\SettingsHook;
 
 class Settings extends SettingsHook
@@ -38,10 +38,7 @@ class Settings extends SettingsHook
             return $settings;
         }
 
-        $devices = Device::query()
-            ->where('disabled', 0)
-            ->where('snmp_disable', 0)
-            ->where('sysObjectID', 'like', '.1.3.6.1.4.1.2620%')
+        $devices = CheckpointDevices::query()
             ->orderBy('hostname')
             ->get(['device_id', 'hostname', 'sysName']);
 
